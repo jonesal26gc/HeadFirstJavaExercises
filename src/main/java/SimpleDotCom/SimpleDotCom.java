@@ -35,7 +35,7 @@ public class SimpleDotCom {
     /**************************************************************
     Display the contents of the instance variables.
     **************************************************************/
-        String textReply = "SimpleDotCom{" +
+        String textReply = "DotCom{" +
                 "locationCells=" + Arrays.toString(locationCells) +
                 ", numOfHits=" + numOfHits +
                 '}';

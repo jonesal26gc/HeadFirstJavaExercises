@@ -13,7 +13,7 @@ public class SimpleDotComTestWithJunit {
         SimpleDotCom s = new SimpleDotCom();
         s.setLocationCells(a);
         assertEquals("wrong"
-                ,"SimpleDotCom{locationCells=[0, 1, 2], numOfHits=0} ArrayList Contents=0 1 2 "
+                ,"DotCom{locationCells=[0, 1, 2], numOfHits=0} ArrayList Contents=0 1 2 "
                 ,s.toString());
 
     }
