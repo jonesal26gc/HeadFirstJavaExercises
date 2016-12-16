@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 public class UserInput {
 
     public String getUserInputString(String prompt) {
+    /**************************************************************
+    Retrieve some input from the user after displaying prompt.
+    **************************************************************/
 
         String inputLine = "";
         System.out.print(prompt + " > ");
@@ -20,9 +23,7 @@ public class UserInput {
             if (inputLine.length() == 0 ) {
                 return "";
             }
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("IOException: " + e);
         }
 
