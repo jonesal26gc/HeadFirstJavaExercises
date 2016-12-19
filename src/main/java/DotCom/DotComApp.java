@@ -26,7 +26,7 @@ public class DotComApp {
      **********************************************************************/
 
         create_targets_for_game();
-        play_the_game();
+        play_game();
 
     }
 
@@ -82,6 +82,7 @@ public class DotComApp {
     // To sort an ArrayList by String field, you must use a comparator.
     // For strings, each character's UNICODE value is used.
     // If equal, zero is returned else negative (field1 < field2) or positive value.
+    // COMPARATOR is an interface whose abstract Method "COMPARE" must be overridden.
     public static Comparator<DotCom> sortDotComByString = new Comparator<DotCom>() {
         public int compare(DotCom d1, DotCom d2) {
             String field1 = d1.getAllLocationCells().toUpperCase();
@@ -145,7 +146,7 @@ public class DotComApp {
         }
     }
 
-    private static void play_the_game() {
+    private static void play_game() {
     /**********************************************************************
      * Play the game until the targets are destroyed.
      **********************************************************************/
