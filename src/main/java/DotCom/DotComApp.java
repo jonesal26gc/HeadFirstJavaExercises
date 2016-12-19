@@ -93,14 +93,5 @@ public class DotComApp {
 
         }
     }
-
-    private void create_targets() {
-
-
-
-
-    }
-
-
 }
 
