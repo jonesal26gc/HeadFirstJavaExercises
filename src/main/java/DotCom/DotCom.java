@@ -94,10 +94,10 @@ public class DotCom {
             } else {
                 result = "Hit";
             }
+            System.out.println(result);
         }
 
         // Return the result to the caller.
-        System.out.println(" " + result);
         return result;
     }
 }
