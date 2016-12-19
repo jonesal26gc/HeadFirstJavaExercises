@@ -1,10 +1,14 @@
 package DotCom;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DotCom {
+    /******************************************************************************
+    A DotCom is a target of three consecutive cells, either vertical or horizontal.
+    It lives on an 8*8 cell matrix, reference by "A1", etc. annotation.
+    ******************************************************************************/
 
+    // Variables.
     private static final char [] xAxisLetter = {'A','B','C','D','E','F','G','H'};
     private boolean isHorizontal;
     private ArrayList<String> locationCells = new ArrayList<String>();
@@ -13,18 +17,17 @@ public class DotCom {
 
     public DotCom() {}
 
+    // Getters.
     public ArrayList<String> getLocationCells() {
         return locationCells;
     }
-
     public String getAllLocationCells() {
         return allLocationCells;
     }
+    public int getNumOfHits() { return numOfHits; }
+    public String getLocationCell(int cell) { return locationCells.get(cell); }
 
-    public String getLocationCell(int cell) {
-        return locationCells.get(cell);
-    }
-
+    // Setters.
     public void setLocationCells() {
     /**************************************************************
     Set the provided locations in the ArrayList.
@@ -55,9 +58,9 @@ public class DotCom {
 
     @Override
     public String toString() {
-        /**************************************************************
-         Display the contents of the instance variables.
-         **************************************************************/
+    /**************************************************************
+     Display the contents of the instance variables.
+     **************************************************************/
 
         String textArrayList = "ArrayList Contents=";
         for ( String x : locationCells) {
@@ -74,25 +77,27 @@ public class DotCom {
     }
 
     public String checkYourself(String userGuess){
+    /**********************************************************
+    Check for hit against this DotCom.
+    **********************************************************/
 
         // convert the string into an integer for checking.
         String guess = userGuess.toUpperCase();
-        String result = "Failed";
+        String result = "Miss";
 
         // Check fot a hit and kill.
         if (locationCells.contains(guess)) {
             numOfHits++;
             locationCells.remove(locationCells.indexOf(guess));
             if (locationCells.isEmpty()) {
-                result = "Kill";
+                result = "Killed DotCom at location " + getAllLocationCells();
             } else {
                 result = "Hit";
             }
         }
 
-        // display the results and return the same to the caller.
-        System.out.println(result);
+        // Return the result to the caller.
+        System.out.println(" " + result);
         return result;
     }
-
 }
