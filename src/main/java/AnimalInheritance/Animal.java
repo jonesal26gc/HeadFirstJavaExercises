@@ -12,7 +12,7 @@ public class Animal {
     private int[] location;
 
 
-    public String makeNoise(){ return null ;}
+    public String makeNoise(){ return "whisper" ;}
     public void eat(){}
 
     public void sleep(){

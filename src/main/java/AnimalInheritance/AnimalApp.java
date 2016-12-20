@@ -42,6 +42,9 @@ public class AnimalApp {
         for (Animal element:a) {
             System.out.println("'" + element.makeNoise() +
                     "' goes the " + element.getClass().getName().replaceFirst("AnimalInheritance.",""));
+            if ( element.getClass().getName() == "AnimalInheritance.Dog") {
+                System.out.println("       ......... alternatively " + new Dog().makeNoise(1));
+            }
         }
 
     }

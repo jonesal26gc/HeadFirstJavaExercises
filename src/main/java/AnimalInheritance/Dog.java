@@ -5,7 +5,8 @@ package AnimalInheritance;
  */
 public class Dog extends Canine {
 
-    public String makeNoise(){
+    // because the dog has a parameter, the polymorphic call does not apply.
+    public String makeNoise(int a){
         return "woof";
     }
     public void eat(){}

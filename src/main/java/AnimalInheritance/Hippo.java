@@ -5,9 +5,10 @@ package AnimalInheritance;
  */
 public class Hippo extends Animal{
 
-    public String makeNoise(){
-        return "puff";
-    }
+ //   public String makeNoise(){
+ //       return "puff";
+ //   }
+
     public void eat(){}
 
 }
