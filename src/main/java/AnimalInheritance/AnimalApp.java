@@ -33,18 +33,31 @@ public class AnimalApp {
                     a[x] = new Wolf();
                     break;
                 default:
-                    a[x] = new Animal();
+                    a[x] = new Wolf();
                     break;
             }
         }
 
         // display the type of animal that was created, along with it's own noise.
         for (Animal element:a) {
+            // execute the animal specific method, or the inherited version.
             System.out.println("'" + element.makeNoise() +
                     "' goes the " + element.getClass().getName().replaceFirst("AnimalInheritance.",""));
-            if ( element.getClass().getName() == "AnimalInheritance.Dog") {
-                System.out.println("       ......... alternatively " + new Dog().makeNoise(1));
+            //if ( element.getClass().getName() == "AnimalInheritance.Dog") {
+            //    System.out.println("       ......... alternatively " + new Dog().makeNoise(1));
+            //}
+
+            // execute inherited method.
+            element.sleep();
+
+            if ( element.getClass().getName() == "AnimalInheritance.Hippo") {
+                element.poo(true);
             }
+
+            if ( element instanceof Cat ) {
+                ((Cat) element).beFriendly();
+            }
+
         }
 
     }

@@ -11,4 +11,8 @@ public class Hippo extends Animal{
 
     public void eat(){}
 
+    public void poo(boolean doIt){
+        if ( doIt) {System.out.println("plop plop !");}
+    }
+
 }
