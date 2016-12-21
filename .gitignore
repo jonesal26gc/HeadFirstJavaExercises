@@ -5,3 +5,5 @@ logs/
 .settings
 .git
 .project
+data/
+
