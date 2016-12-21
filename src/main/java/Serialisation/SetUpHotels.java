@@ -37,6 +37,19 @@ public class SetUpHotels {
 
     }
 
+    public static void listHotels(ArrayList<Hotel> hotelList) {
+
+        // Loop through the hotels, displaying their characteristics.
+        for ( Hotel i : hotelList ) {
+            System.out.println(i.toString());
+            for ( Room r : i.r ) {
+                System.out.println(r.toString());
+            }
+            System.out.println("");
+        }
+
+    }
+
     public static void serialiseHotel(ArrayList<Hotel> hotelList) {
 
         try {
@@ -70,18 +83,4 @@ public class SetUpHotels {
             ex.printStackTrace();
         }
     }
-
-    public static void listHotels(ArrayList<Hotel> hotelList) {
-
-        // Loop through the hotels, displaying their characteristics.
-        for ( Hotel i : hotelList ) {
-            System.out.println(i.toString());
-            for ( Room r : i.r ) {
-                System.out.println(r.toString());
-            }
-            System.out.println("");
-        }
-
-    }
-
 }
