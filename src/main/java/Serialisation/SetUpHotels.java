@@ -37,7 +37,6 @@ public class SetUpHotels {
 
         // write the data to an export file.
         exportHotels(hotelList);
-
     }
 
     private static void fillHotelRooms(ArrayList<Hotel> hotelList) {
@@ -68,7 +67,6 @@ public class SetUpHotels {
             }
             System.out.println("");
         }
-
     }
 
     public static void serialiseHotel(ArrayList<Hotel> hotelList) {
