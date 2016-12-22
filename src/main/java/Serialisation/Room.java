@@ -1,7 +1,6 @@
 package Serialisation;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import static java.lang.Math.random;
 
@@ -9,52 +8,71 @@ import static java.lang.Math.random;
  * Created by xm39 on 24/08/2016.
  */
 public class Room implements Serializable {
-    public static enum roomColour {Red, Blue, Green, Yellow, White, Pink, Orange, Black, Grey, Purple, Cream, Turquoise};
 
-    int number;
-    int maxOccupants;
-    roomColour colour;
-    public static Integer[] listNums = {0,1,2,3};
+    private enum colourOption {Red, Blue, Green, Yellow, White, Pink, Orange, Black, Grey, Purple, Cream, Turquoise};
+
+    private int number;
+    private int maxOccupants;
+    private boolean occupied;
+    private int numberOfOccupants;
+    private colourOption colourScheme;
 
     public Room(int number) {
         this.number = number;
 
-        maxOccupants = (int) ((random() * 2) + 2);
+        // Set not occupied.
+        occupied = false;
+        numberOfOccupants=0;
 
-        //if ( listNums.(maxOccupants) ) {
-        //    System.out.println("Yes, it's in the list !");
-        //} else {
-        //    System.out.println("No, it's not in the list !");
-        //}
+        // randomise the occupancy.
+        maxOccupants = (int) ((random() * 3) + 2);
 
+        // randomise the colourScheme scheme.
         switch ((int) ((random() * 12 ) + 1)) {
             case 0:
-                colour = roomColour.Red; break;
+                colourScheme = colourOption.Red; break;
             case 1:
-                colour = roomColour.Blue; break;
+                colourScheme = colourOption.Blue; break;
             case 2:
-                colour = roomColour.Green; break;
+                colourScheme = colourOption.Green; break;
             case 3:
-                colour = roomColour.Yellow; break;
+                colourScheme = colourOption.Yellow; break;
             case 4:
-                colour = roomColour.White; break;
+                colourScheme = colourOption.White; break;
             case 5:
-                colour = roomColour.Pink; break;
+                colourScheme = colourOption.Pink; break;
             case 6:
-                colour = roomColour.Orange; break;
+                colourScheme = colourOption.Orange; break;
             case 7:
-                colour = roomColour.Black; break;
+                colourScheme = colourOption.Black; break;
             case 8:
-                colour = roomColour.Grey; break;
+                colourScheme = colourOption.Grey; break;
             case 9:
-                colour = roomColour.Purple; break;
+                colourScheme = colourOption.Purple; break;
             case 10:
-                colour = roomColour.Cream; break;
+                colourScheme = colourOption.Cream; break;
             case 11:
-                colour = roomColour.Turquoise; break;
+                colourScheme = colourOption.Turquoise; break;
             default:
-                colour = roomColour.Red; break;
+                colourScheme = colourOption.Red; break;
         }
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setNumberOfOccupants(int numberOfOccupants) {
+        this.occupied = true;
+        this.numberOfOccupants = numberOfOccupants;
+    }
+
+    public int getMaxOccupants() {
+        return maxOccupants;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     @Override
@@ -62,10 +80,10 @@ public class Room implements Serializable {
         return "Room{" +
                 "number=" + number +
                 ", maxOccupants=" + maxOccupants +
-                ", colour=" + colour +
+                ", occupied=" + occupied +
+                ", numberOfOccupants=" + numberOfOccupants +
+                ", colourScheme=" + colourScheme +
                 '}';
     }
 }
-
-
 

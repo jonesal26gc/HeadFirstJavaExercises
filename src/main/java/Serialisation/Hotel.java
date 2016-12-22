@@ -9,27 +9,24 @@ import static java.lang.Math.random;
  * Created by xm39 on 24/08/2016.
  */
 public class Hotel implements Serializable{
-    int number;
-    String name;
-    Integer numberOfRooms;
-    ArrayList<Room> r = new ArrayList<Room>();
-    public static FileOutputStream fileStream;
-    public static ObjectOutputStream os;
 
-    private static final String NEW_LINE = "\n";
+    private int number;
+    private String name;
+    private Integer numberOfRooms;
+    public ArrayList<Room> roomList = new ArrayList<Room>();
+
+    private static FileOutputStream fileStream;
+    private static ObjectOutputStream os;
 
     public Hotel(int number, String name) {
         this.number = number;
         this.name = name;
 
-        //System.out.println("Creating a hotel ....");
-
         // Set the number of rooms and create them.
-        numberOfRooms = (int) ((random() * 12 ) + 1);
+        numberOfRooms = (int) ((random() * 11 ) + 1);
 
-        for ( int i = 0 ; i < numberOfRooms ; i++) {
-            r.add(new Room(i));
-            //System.out.println(r.get(i).toString());
+        for ( int i = 1 ; i <= numberOfRooms ; i++) {
+            roomList.add(new Room(i));
         }
     }
 
@@ -42,10 +39,14 @@ public class Hotel implements Serializable{
                 '}';
     }
 
+    public Integer getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
     public void listRooms() {
 
         for ( int i = 0 ; i < numberOfRooms ; i++) {
-            System.out.println(r.get(i).toString());
+            System.out.println(roomList.get(i).toString());
         }
     }
 
@@ -89,4 +90,21 @@ public class Hotel implements Serializable{
 
     }
 
+    public int bookARoom(int numberOfOccupantsRequested) {
+
+        // Look for a valid room, and save it it.
+        for (Room i : roomList) {
+            if ( (! i.isOccupied()) & i.getMaxOccupants() >= numberOfOccupantsRequested ) {
+                i.setNumberOfOccupants(numberOfOccupantsRequested);
+                return i.getNumber();
+            }
+        }
+
+        // no such room available.
+        return 0;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

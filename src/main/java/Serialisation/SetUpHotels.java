@@ -22,9 +22,12 @@ public class SetUpHotels {
         Integer numberOfHotels = (int) ((random() * 4 ) + 1);
 
         // Create each of the hotels, adding them to the array.
-        for (Integer i = 0 ; i < numberOfHotels ; i++) {
-            hotelList.add(new Hotel(i, "Hotel #".concat(i.toString())));
+        for (Integer i = 1 ; i <= numberOfHotels ; i++) {
+            hotelList.add(new Hotel(i, "Hotel Name #".concat(i.toString())));
         }
+
+        // fill a few rooms.
+        fillHotelRooms(hotelList);
 
         // display the contents of the objects.
         listHotels(hotelList);
@@ -37,12 +40,30 @@ public class SetUpHotels {
 
     }
 
+    private static void fillHotelRooms(ArrayList<Hotel> hotelList) {
+
+        // Book a few rooms in these hotels.
+        for (int i=0 ; i<hotelList.size();i++) {
+
+            // randomise the number of rooms to be occupied.
+            for (int j=0 ; j<(Math.random()*(hotelList.get(i).getNumberOfRooms())) ; j++ ) {
+
+                // book a room for a randomised occupancy value, and confirm room number.
+                int roomThatIsBooked = hotelList.get(i).bookARoom((int) ((Math.random() * 4)+1));
+                if (roomThatIsBooked>0) {
+                    //System.out.println("Room number #" + roomThatIsBooked +
+                    //                    " booked in " + hotelList.get(i).getName());
+                }
+            }
+        }
+    }
+
     public static void listHotels(ArrayList<Hotel> hotelList) {
 
         // Loop through the hotels, displaying their characteristics.
         for ( Hotel i : hotelList ) {
             System.out.println(i.toString());
-            for ( Room r : i.r ) {
+            for ( Room r : i.roomList) {
                 System.out.println(r.toString());
             }
             System.out.println("");
@@ -72,10 +93,10 @@ public class SetUpHotels {
             // Loop through the hotels, displaying their characteristics.
             for ( Hotel i : hotelList ) {
                 bufWrite.write(i.toString() + NEW_LINE);
-                for ( Room r : i.r ) {
+                for ( Room r : i.roomList) {
                     bufWrite.write(r.toString() + NEW_LINE);
                 }
-                System.out.println("");
+                bufWrite.write(NEW_LINE);
             }
             bufWrite.close();
         } catch (IOException ex) {
