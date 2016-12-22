@@ -1,5 +1,6 @@
 package Serialisation;
 
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,61 +9,53 @@ import java.util.ArrayList;
 public class RestoreHotels {
 
     public static void main (String[] args){
-        // this procedure re-establishes previously saved objects onto the heap.
 
         // read the objects from a serialised file.
-        ArrayList<Hotel> h = deserialiseHotels();
+        ArrayList<Hotel> hotelList = deserialiseHotels();
+
+        // add a new hotel.
+        //hotelList.add(new Hotel(4,"An extra Hotel"));
 
         // display the contents of the objects.
-        System.out.println("there are " + h.size() + " hotels in the array");
-        listHotels(h);
+        System.out.println("there are " + hotelList.size() + " hotels in the array");
+        listHotels(hotelList);
+
     }
 
     public static ArrayList<Hotel> deserialiseHotels() {
 
         Object obj;
-        ArrayList<Hotel> h = new ArrayList<Hotel>();
+        ArrayList<Hotel> hotelList = new ArrayList<Hotel>();
 
         try {
-            System.out.println("opening serialisation file.");
-            FileInputStream fileStream = new FileInputStream("Hotel1.ser");
+            System.out.println("Opening serialisation file from which to restore Hotels.");
+            FileInputStream fileStream = new FileInputStream("data/Hotel.ser");
             ObjectInputStream os = new ObjectInputStream(fileStream);
 
-            System.out.println("reading from serialisation file.");
             try {
                 while (true) {
                     obj = os.readObject();
-                    h.add((Hotel) obj);
+                    hotelList.add((Hotel) obj);
                 }
-            } catch(ClassNotFoundException ex){
-                System.out.println("Class not found.");
-                ex.printStackTrace();
-            } finally {
+            } catch (EOFException ex) {
                 os.close();
-                return h;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
         } catch (IOException ex) {
-            System.out.println("An IO exception occurred whilst reading serialised data.");
+            System.out.println("An IO exception occurred whilst opening serialisation file.");
             ex.printStackTrace();
-        } finally {
         }
 
-        return h;
+        return hotelList;
     }
 
+    private static void listHotels(ArrayList<Hotel> h) {
 
-    public static void listHotels(ArrayList<Hotel> h) {
-
-        int index = 0;
-        Hotel h1;
-        while (h.size() > index) {
-            h1 = h.get(index);
-            System.out.println(h1.toString());
-            h1.listRooms();
-            index++;
+        // Loop through the hotels and list them.
+        for (Hotel i : h) {
+            System.out.println(i.toString());
         }
-
     }
-
 }
