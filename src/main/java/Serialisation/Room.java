@@ -1,15 +1,17 @@
 package Serialisation;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import static java.lang.Math.random;
 
 /**
  * Created by xm39 on 24/08/2016.
  */
-public class Room implements Serializable {
+public class Room implements Serializable, Comparable<Room> {
 
-    private enum colourOption {Red, Blue, Green, Yellow, White, Pink, Orange, Black, Grey, Purple, Cream, Turquoise};
+    private enum colourOption {Red, Blue, Green, Yellow, White, Pink
+        , Orange, Black, Grey, Purple, Cream, Turquoise}
 
     private int number;
     private int maxOccupants;
@@ -22,39 +24,52 @@ public class Room implements Serializable {
 
         // Set not occupied.
         occupied = false;
-        numberOfOccupants=0;
+        numberOfOccupants = 0;
 
         // randomise the occupancy.
         maxOccupants = (int) ((random() * 3) + 2);
 
         // randomise the colourScheme scheme.
-        switch ((int) ((random() * 12 ) + 1)) {
+        switch ((int) ((random() * 12) + 1)) {
             case 0:
-                colourScheme = colourOption.Red; break;
+                colourScheme = colourOption.Red;
+                break;
             case 1:
-                colourScheme = colourOption.Blue; break;
+                colourScheme = colourOption.Blue;
+                break;
             case 2:
-                colourScheme = colourOption.Green; break;
+                colourScheme = colourOption.Green;
+                break;
             case 3:
-                colourScheme = colourOption.Yellow; break;
+                colourScheme = colourOption.Yellow;
+                break;
             case 4:
-                colourScheme = colourOption.White; break;
+                colourScheme = colourOption.White;
+                break;
             case 5:
-                colourScheme = colourOption.Pink; break;
+                colourScheme = colourOption.Pink;
+                break;
             case 6:
-                colourScheme = colourOption.Orange; break;
+                colourScheme = colourOption.Orange;
+                break;
             case 7:
-                colourScheme = colourOption.Black; break;
+                colourScheme = colourOption.Black;
+                break;
             case 8:
-                colourScheme = colourOption.Grey; break;
+                colourScheme = colourOption.Grey;
+                break;
             case 9:
-                colourScheme = colourOption.Purple; break;
+                colourScheme = colourOption.Purple;
+                break;
             case 10:
-                colourScheme = colourOption.Cream; break;
+                colourScheme = colourOption.Cream;
+                break;
             case 11:
-                colourScheme = colourOption.Turquoise; break;
+                colourScheme = colourOption.Turquoise;
+                break;
             default:
-                colourScheme = colourOption.Red; break;
+                colourScheme = colourOption.Red;
+                break;
         }
     }
 
@@ -84,6 +99,12 @@ public class Room implements Serializable {
                 ", numberOfOccupants=" + numberOfOccupants +
                 ", colourScheme=" + colourScheme +
                 '}';
+    }
+
+    // This would be the one and only default sort comparator for Room.
+    // To use other sort sequences, use inner class definitions for Comparator in calling module.
+    public int compareTo(Room r) {
+        return ( maxOccupants - r.getMaxOccupants());
     }
 }
 
