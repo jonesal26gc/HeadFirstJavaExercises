@@ -2,6 +2,8 @@ package Serialisation;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static java.lang.Math.random;
 
@@ -41,6 +43,9 @@ public class Hotel implements Serializable{
 
     public Integer getNumberOfRooms() {
         return numberOfRooms;
+    }
+    public String getName() {
+        return name;
     }
 
     public void listRooms() {
@@ -90,13 +95,42 @@ public class Hotel implements Serializable{
 
     }
 
+    public class roomSortByOccupiedStatus implements Comparator<Room> {
+        public int compare (Room room1, Room room2) {
+
+            if ( ( room1.isOccupied() ) & ( ! room2.isOccupied() ) ) {
+                return +1;
+            } else {
+                if ( (! room1.isOccupied() ) & ( room2.isOccupied() ) ) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
     public int bookARoom(int numberOfOccupantsRequested) {
 
-        // Look for a valid room, and save it it.
-        for (Room i : roomList) {
+        // Sort by occupancy status.
+        ArrayList<Room> sortedRoom_list2 = new ArrayList<Room>(roomList);
+        Collections.sort(sortedRoom_list2,new roomSortByOccupiedStatus());
+
+        // sort the list of rooms into descending occupancy sequence.
+        ArrayList<Room> sortedRoom_list = new ArrayList<Room>(roomList);
+        Collections.sort(sortedRoom_list);
+
+        for (Room r:sortedRoom_list) {
+            System.out.println("Hotel " + this.number +
+                    "room occupancy: " + r.getMaxOccupants());
+        }
+
+        // Having sorted the list, find the first available room in the sequence.
+        for (Room i : sortedRoom_list) {
             if ( (! i.isOccupied()) & i.getMaxOccupants() >= numberOfOccupantsRequested ) {
-                i.setNumberOfOccupants(numberOfOccupantsRequested);
-                return i.getNumber();
+                int j = roomList.indexOf(i);
+                roomList.get(j).setNumberOfOccupants(numberOfOccupantsRequested);
+                return roomList.get(j).getNumber();
             }
         }
 
@@ -104,7 +138,4 @@ public class Hotel implements Serializable{
         return 0;
     }
 
-    public String getName() {
-        return name;
-    }
 }
