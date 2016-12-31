@@ -38,7 +38,7 @@ public class FamilyPhotoRenamingApp {
                                 // display the original filename.
                                 System.out.println("\nFile " + String.format("%04d",fileNumber) + ": " + j.getName());
 
-                                // DFormat the replacement filename.
+                                // Format the replacement filename.
                                 String newFilenameString = i.getPath() + "\\" +
                                         j.getName().replace(j.getName().substring(0,j.getName().indexOf('.')),i.getName() + " - " + String.format("%04d",fileNumber));
 
