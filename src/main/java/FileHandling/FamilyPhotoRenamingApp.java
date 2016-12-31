@@ -30,11 +30,11 @@ public class FamilyPhotoRenamingApp {
                 processSubFolder(i);
             } catch (Exception ex) {
                 ex.printStackTrace();
+                return;
             }
 
         }
     }
-
 
     private static void processSubFolder(File i) throws Exception {
     /*******************************************************************
@@ -46,10 +46,18 @@ public class FamilyPhotoRenamingApp {
             throw new Exception("ERROR - expected sub-folder but found file: " + i.getName());
         }
 
-        checkSubFolderFormat();
-
         // display the sub-folder name.
         System.out.println(NEW_LINE + "Sub-folder: " + i.getPath());
+
+        if ( ! checkSubFolderFormat(i.getName()) ) {
+            if ( UPDATE_INDICATOR ) {
+                throw new Exception("ERROR - sub-folder name format is invalid: " + i.getName());
+            } else {
+                System.out.println("Error - sub-folder format is invalid: " + i.getName());
+            }
+        } else {
+            System.out.println("sub-folder format is OK: " + i.getName());
+        }
 
         // Iterate through the files in the sub-folder.
         File subFolder = new File(i.getPath());
@@ -58,16 +66,15 @@ public class FamilyPhotoRenamingApp {
         for (File j : listOfFiles) {
 
             fileNumber++;
+            processFile(i, j, fileNumber);
 
-            try {
-                processFile(i, j, fileNumber);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
-    private static void checkSubFolderFormat() {
+    private static boolean checkSubFolderFormat(String subFolderName) {
+        SubFolderNameValidation s = new SubFolderNameValidation();
+        return s.validate(subFolderName);
+
     }
 
     private static void processFile(File i, File j, int fileNumber) throws Exception {
