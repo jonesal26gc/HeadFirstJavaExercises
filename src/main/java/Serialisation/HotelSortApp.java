@@ -11,7 +11,6 @@ public class HotelSortApp {
 
     public static void main(String[] args) {
 
-
         /**************************************************************************
          * generate a list of hotels, and sort them into descending size sequence.
          * Finally, display them.
