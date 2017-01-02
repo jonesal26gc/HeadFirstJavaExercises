@@ -49,6 +49,7 @@ public class FamilyPhotoRenamingApp {
         // display the sub-folder name.
         System.out.println(NEW_LINE + "Sub-folder: " + i.getPath());
 
+        // Check the sub-folder name format.
         if ( ! checkSubFolderFormat(i.getName()) ) {
             if ( UPDATE_INDICATOR ) {
                 throw new Exception("ERROR - sub-folder name format is invalid: " + i.getName());
@@ -56,7 +57,19 @@ public class FamilyPhotoRenamingApp {
                 System.out.println("Error - sub-folder format is invalid: " + i.getName());
             }
         } else {
+
+            // Check the format of the existing sub-folder name.
             System.out.println("sub-folder format is OK: " + i.getName());
+
+            // Derive a new sub-folder name.
+            String newSubFolderName = renameSubFolder(i.getName());
+            System.out.println("Revised name is: " + newSubFolderName);
+
+            // Rename the sub-folder.
+            String newPath = ( i.getPath().replace(i.getName(),"").concat(newSubFolderName));
+            System.out.println("new path: " + newPath);
+            File newSubFolder = new File(newPath);
+            //i.renameTo(newSubFolder);
         }
 
         // Iterate through the files in the sub-folder.
@@ -64,17 +77,33 @@ public class FamilyPhotoRenamingApp {
         File[] listOfFiles = subFolder.listFiles();
         int fileNumber = 0;
         for (File j : listOfFiles) {
-
             fileNumber++;
             processFile(i, j, fileNumber);
-
         }
+    }
+
+    private static String renameSubFolder(String subFolderName) {
+
+        // Split the original name into two parts.
+        String part1 = subFolderName.substring(0,21);
+        String part2 = subFolderName.substring(21);
+        //System.out.println("'" + part1 + "'");
+        //System.out.println("'" + part2 + "'");
+
+        // Formulate the replacement part one.
+        String revisedPart1 = part1.substring(0,4);
+        revisedPart1 = revisedPart1 + part1.substring(5,7);
+        revisedPart1 = revisedPart1 + part1.substring(8,14);
+        revisedPart1 = revisedPart1 + part1.substring(15,16);
+        revisedPart1 = revisedPart1 + part1.substring(16,19);
+
+        // Return the revised name.
+        return (revisedPart1 + "[" + part2 + "]");
     }
 
     private static boolean checkSubFolderFormat(String subFolderName) {
         SubFolderNameValidation s = new SubFolderNameValidation();
         return s.validate(subFolderName);
-
     }
 
     private static void processFile(File i, File j, int fileNumber) throws Exception {
