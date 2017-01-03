@@ -50,8 +50,13 @@ public class FamilyPhotoRenamingApp {
             throw new Exception("ERROR - expected sub-folder but found something else.");
         }
 
+        // If this sub-folder is already correctly set, then skip it.
+        if ( checkSubFolderAlreadySet(subFolder.getName())) {
+            return;
+        }
+
         // Check the sub-folder name format.
-        if ( ! checkSubFolderFormat(subFolder.getName()) ) {
+        if ( ! checkSubFolderNameFormat(subFolder.getName()) ) {
             if ( UPDATE_INDICATOR ) {
                 throw new Exception("ERROR - sub-folder name format is invalid: " + subFolder.getName());
             } else {
@@ -83,6 +88,11 @@ public class FamilyPhotoRenamingApp {
         }
     }
 
+    private static boolean checkSubFolderAlreadySet(String subFolderName) {
+        SubFolderAlreadySetCheck s = new SubFolderAlreadySetCheck();
+        return s.validate(subFolderName);
+    }
+
     private static String renameSubFolder(String subFolderName) {
 
         // Split the original name into two parts.
@@ -92,18 +102,29 @@ public class FamilyPhotoRenamingApp {
         //System.out.println("'" + part2 + "'");
 
         // Formulate the replacement part one.
-        String revisedPart1 = part1.substring(0,4);
-        revisedPart1 = revisedPart1 + part1.substring(5,7);
-        revisedPart1 = revisedPart1 + part1.substring(8,14);
-        revisedPart1 = revisedPart1 + part1.substring(15,16);
-        revisedPart1 = revisedPart1 + part1.substring(16,19);
+        String revisedPart1 = part1.substring(0, 4)
+                + part1.substring(5, 7)
+                + " "
+                + part1.substring(8, 10)
+                + getMonthLabel(part1.substring(5, 7))
+                + part1.substring(2, 4)
+                + " ";
 
         // Return the revised name.
         return (revisedPart1 + part2);
     }
 
-    private static boolean checkSubFolderFormat(String subFolderName) {
-        SubFolderNameValidation s = new SubFolderNameValidation();
+    private static String getMonthLabel(String month) {
+        try {
+            int i = Integer.parseInt(month);
+            return MONTH_LABELS[i - 1];
+        } catch (NumberFormatException ex) {
+            return MONTH_LABELS[12];
+        }
+    }
+
+    private static boolean checkSubFolderNameFormat(String subFolderName) {
+        SubFolderNameFormatCheck s = new SubFolderNameFormatCheck();
         return s.validate(subFolderName);
     }
 
