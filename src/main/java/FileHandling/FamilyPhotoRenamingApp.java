@@ -8,8 +8,10 @@ public class FamilyPhotoRenamingApp {
  * more appropriately.
  */
 
-    private static final boolean UPDATE_INDICATOR = false;
+    private static final boolean UPDATE_INDICATOR = true;
     private static final String NEW_LINE = "\n";
+    public static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
+            ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
 
     public static void main(String[] args) {
 
@@ -23,11 +25,11 @@ public class FamilyPhotoRenamingApp {
 
         // Iterate through the sub-folders of this parent directory.
         listOfSubFolders = parentFolder.listFiles();
-        for (File i : listOfSubFolders) {
+        for (File subFolder : listOfSubFolders) {
 
             // Process a sub-folder and the files within it.
             try {
-                processSubFolder(i);
+                processSubFolder(subFolder);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return;
@@ -36,49 +38,48 @@ public class FamilyPhotoRenamingApp {
         }
     }
 
-    private static void processSubFolder(File i) throws Exception {
+    private static void processSubFolder(File subFolder) throws Exception {
     /*******************************************************************
      * process a sub-folder and the files found within it.
      */
+        // Say that the sub-folder name is OK.
+        System.out.println("Sub-folder: " + subFolder.getName());
 
         // Check that this is actually a sub-folder.
-        if ( ! (i.isDirectory()) ) {
-            throw new Exception("ERROR - expected sub-folder but found file: " + i.getName());
+        if ( ! (subFolder.isDirectory()) ) {
+            throw new Exception("ERROR - expected sub-folder but found something else.");
         }
 
-        // display the sub-folder name.
-        System.out.println(NEW_LINE + "Sub-folder: " + i.getPath());
-
         // Check the sub-folder name format.
-        if ( ! checkSubFolderFormat(i.getName()) ) {
+        if ( ! checkSubFolderFormat(subFolder.getName()) ) {
             if ( UPDATE_INDICATOR ) {
-                throw new Exception("ERROR - sub-folder name format is invalid: " + i.getName());
+                throw new Exception("ERROR - sub-folder name format is invalid: " + subFolder.getName());
             } else {
-                System.out.println("Error - sub-folder format is invalid: " + i.getName());
+                System.out.println("Error - sub-folder format is invalid: " + subFolder.getName());
             }
         } else {
 
-            // Check the format of the existing sub-folder name.
-            System.out.println("sub-folder format is OK: " + i.getName());
-
             // Derive a new sub-folder name.
-            String newSubFolderName = renameSubFolder(i.getName());
-            System.out.println("Revised name is: " + newSubFolderName);
+            String revisedSubFolderName = renameSubFolder(subFolder.getName());
+            System.out.println("Revised sub-folder name is: " + revisedSubFolderName);
 
-            // Rename the sub-folder.
-            String newPath = ( i.getPath().replace(i.getName(),"").concat(newSubFolderName));
-            System.out.println("new path: " + newPath);
-            File newSubFolder = new File(newPath);
-            //i.renameTo(newSubFolder);
-        }
+            // Rename this sub-folder.
+            File revisedSubFolder;
+            if ( UPDATE_INDICATOR ) {
+                revisedSubFolder = new File(subFolder.getPath().replace(subFolder.getName()
+                        , "").concat(revisedSubFolderName));
+                subFolder.renameTo(revisedSubFolder);
+            } else {
+                revisedSubFolder = subFolder;
+            }
 
-        // Iterate through the files in the sub-folder.
-        File subFolder = new File(i.getPath());
-        File[] listOfFiles = subFolder.listFiles();
-        int fileNumber = 0;
-        for (File j : listOfFiles) {
-            fileNumber++;
-            processFile(i, j, fileNumber);
+            // Iterate through the files in the sub-folder.
+            File[] listOfFiles = revisedSubFolder.listFiles();
+            int fileNumber = 0;
+            for (File targetFile : listOfFiles) {
+                fileNumber++;
+                processFile(revisedSubFolder, targetFile, fileNumber);
+            }
         }
     }
 
@@ -98,7 +99,7 @@ public class FamilyPhotoRenamingApp {
         revisedPart1 = revisedPart1 + part1.substring(16,19);
 
         // Return the revised name.
-        return (revisedPart1 + "[" + part2 + "]");
+        return (revisedPart1 + part2);
     }
 
     private static boolean checkSubFolderFormat(String subFolderName) {
@@ -106,41 +107,45 @@ public class FamilyPhotoRenamingApp {
         return s.validate(subFolderName);
     }
 
-    private static void processFile(File i, File j, int fileNumber) throws Exception {
+    private static void processFile(File subFolder, File targetFile, int fileNumber) throws Exception {
     /**************************************************************************
      * Process a file within the sub-folder.
      */
 
-        if ( ! j.isFile() ) {
-            throw new Exception("ERROR - expected file(s) but found sub-folder: " + j.getName());
+        // Check that this is indeed a file.
+        if ( ! targetFile.isFile() ) {
+            throw new Exception("ERROR - expected file(s) but found sub-folder: " + targetFile.getName());
         }
 
-        // Invalid files will be deleted, whilst others will be renamed.
-        if ( j.getName().startsWith("Thumb") ) {
-            System.out.println("Warning - inappropriate file found - will delete: " + j.getName());
+        // Inappropriate files are be deleted.
+        if ( targetFile.getName().startsWith("Thumb") ) {
+            System.out.println("Warning - inappropriate file found - will delete: " + targetFile.getName());
             if (UPDATE_INDICATOR) {
-                j.delete();
+                targetFile.delete();
             }
         } else {
 
             // display the original filename.
-            //System.out.println("File " + String.format("%04d",fileNumber) + ": " + j.getName());
+            System.out.println("File " + String.format("%04d",fileNumber) + ": " + targetFile.getName());
+
+            String revisedTargetFileName = renameTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
+            System.out.println("Revised file name is: " + revisedTargetFileName);
 
             // Format the replacement filename.
-            String newFilenameString = i.getPath() + "\\" +
-                    j.getName().replace(j.getName().substring(0, j.getName().indexOf('.')), i.getName() +
-                            " " + String.format("%04d", fileNumber));
-
-            // Display the filename.
-            System.out.println("New filename is: " + newFilenameString);
-
-            // Rename the file.
-            if (UPDATE_INDICATOR) {
-                File newFilename = new File(newFilenameString);
-                j.renameTo(newFilename);
+            File revisedTargetFile;
+            if ( UPDATE_INDICATOR ) {
+                revisedTargetFile = new File(targetFile.getPath()
+                        .replace(targetFile.getName(),revisedTargetFileName));
+                targetFile.renameTo(revisedTargetFile);
+            } else {
+                revisedTargetFile = targetFile;
             }
-
         }
     }
 
+    private static String renameTargetFile(String folderName, String fileName, int fileNumber) {
+        return ( folderName +
+                String.format(" #%04d", fileNumber) +
+                fileName.substring(fileName.indexOf('.')) ) ;
+    }
 }
