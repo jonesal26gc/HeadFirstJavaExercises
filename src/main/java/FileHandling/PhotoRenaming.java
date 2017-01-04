@@ -2,7 +2,7 @@ package FileHandling;
 
 import java.io.File;
 
-public class FamilyPhotoRenamingApp {
+public class PhotoRenaming {
 /********************************************************************
  * This program loops through the photo album and renames the files
  * more appropriately.
@@ -10,13 +10,14 @@ public class FamilyPhotoRenamingApp {
 
     private static final boolean UPDATE_INDICATOR = true;
     private static final String NEW_LINE = "\n";
-    public static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
+    private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
+    public enum FileType {JPG,MOV,TXT,DOC,XXX}
 
-    public static void main(String[] args) {
+    public static void doIt(String parentFolderName) {
 
         // Verify that the parent folder is actually a folder.
-        File parentFolder = new File("d:/Family Photo Library");
+        File parentFolder = new File(parentFolderName);
         File[] listOfSubFolders = null;
 
         if ( ! parentFolder.isDirectory() ) {
@@ -42,20 +43,20 @@ public class FamilyPhotoRenamingApp {
     /*******************************************************************
      * process a sub-folder and the files found within it.
      */
-        // Say that the sub-folder name is OK.
-        System.out.println("Sub-folder: " + subFolder.getName());
+        // Display sub-folder name.
+        System.out.println(NEW_LINE + "Sub-folder: " + subFolder.getName());
 
         // Check that this is actually a sub-folder.
         if ( ! (subFolder.isDirectory()) ) {
             throw new Exception("ERROR - expected sub-folder but found something else.");
         }
 
-        // If this sub-folder is already correctly set, then skip it.
-        if ( checkSubFolderAlreadySet(subFolder.getName())) {
+        // If this sub-folder title is already correctly set, then skip it.
+        if ( checkSubFolderNameAlreadySet(subFolder.getName())) {
             return;
         }
 
-        // Check the sub-folder name format.
+        // Check the original sub-folder name prior to reformatting.
         if ( ! checkSubFolderNameFormat(subFolder.getName()) ) {
             if ( UPDATE_INDICATOR ) {
                 throw new Exception("ERROR - sub-folder name format is invalid: " + subFolder.getName());
@@ -64,7 +65,7 @@ public class FamilyPhotoRenamingApp {
             }
         } else {
 
-            // Derive a new sub-folder name.
+            // Derive the reformatted sub-folder name.
             String revisedSubFolderName = renameSubFolder(subFolder.getName());
             System.out.println("Revised sub-folder name is: " + revisedSubFolderName);
 
@@ -78,7 +79,7 @@ public class FamilyPhotoRenamingApp {
                 revisedSubFolder = subFolder;
             }
 
-            // Iterate through the files in the sub-folder.
+            // Iterate through the files in the sub-folder that will require renaming themselves.
             File[] listOfFiles = revisedSubFolder.listFiles();
             int fileNumber = 0;
             for (File targetFile : listOfFiles) {
@@ -88,24 +89,30 @@ public class FamilyPhotoRenamingApp {
         }
     }
 
-    private static boolean checkSubFolderAlreadySet(String subFolderName) {
-        SubFolderAlreadySetCheck s = new SubFolderAlreadySetCheck();
+    private static boolean checkSubFolderNameAlreadySet(String subFolderName) {
+        /***************************************************************
+         * Check whether the sub-folder already has the new format.
+         */
+        SubFolderNameAlreadySetCheck s = new SubFolderNameAlreadySetCheck();
         return s.validate(subFolderName);
     }
 
     private static String renameSubFolder(String subFolderName) {
+        /******************************************************************
+         * Set the new name for the sub-folder.
+         */
 
         // Split the original name into two parts.
         String part1 = subFolderName.substring(0,21);
         String part2 = subFolderName.substring(21);
-        //System.out.println("'" + part1 + "'");
-        //System.out.println("'" + part2 + "'");
 
         // Formulate the replacement part one.
         String revisedPart1 = part1.substring(0, 4)
+                + part1.substring(4,5)
                 + part1.substring(5, 7)
-                + " "
+                + "-"
                 + part1.substring(8, 10)
+                + " "
                 + getMonthLabel(part1.substring(5, 7))
                 + part1.substring(2, 4)
                 + " ";
@@ -115,6 +122,9 @@ public class FamilyPhotoRenamingApp {
     }
 
     private static String getMonthLabel(String month) {
+        /*******************************************************
+         * Look-up the Month's acronym using the original month number.
+         */
         try {
             int i = Integer.parseInt(month);
             return MONTH_LABELS[i - 1];
@@ -124,14 +134,18 @@ public class FamilyPhotoRenamingApp {
     }
 
     private static boolean checkSubFolderNameFormat(String subFolderName) {
+        /***************************************************************
+         * Check the format of the original sub-folder name for suitability
+         * prior to reformatting.
+         */
         SubFolderNameFormatCheck s = new SubFolderNameFormatCheck();
         return s.validate(subFolderName);
     }
 
     private static void processFile(File subFolder, File targetFile, int fileNumber) throws Exception {
-    /**************************************************************************
-     * Process a file within the sub-folder.
-     */
+        /**************************************************************************
+         * Process a file within the sub-folder.
+         */
 
         // Check that this is indeed a file.
         if ( ! targetFile.isFile() ) {
@@ -149,10 +163,20 @@ public class FamilyPhotoRenamingApp {
             // display the original filename.
             System.out.println("File " + String.format("%04d",fileNumber) + ": " + targetFile.getName());
 
-            String revisedTargetFileName = renameTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
+            // Determine the type of the file.
+            FileType ft = determineFileType(targetFile.getName());
+            switch (ft) {
+                case JPG: { System.out.println("It's a picture"); break; }
+                case MOV: { System.out.println("It's a movie"); break; }
+                case DOC: { System.out.println("It's a document"); break; }
+                case TXT: { System.out.println("It's a text document"); break; }
+                case XXX: { System.out.println("Don't know what it is !"); break; }
+            }
+
+            String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
             System.out.println("Revised file name is: " + revisedTargetFileName);
 
-            // Format the replacement filename.
+            // Rename the file.
             File revisedTargetFile;
             if ( UPDATE_INDICATOR ) {
                 revisedTargetFile = new File(targetFile.getPath()
@@ -164,9 +188,47 @@ public class FamilyPhotoRenamingApp {
         }
     }
 
-    private static String renameTargetFile(String folderName, String fileName, int fileNumber) {
-        return ( folderName +
-                String.format(" #%04d", fileNumber) +
+    public static FileType determineFileType(String name) {
+        FileType ft;
+        try {
+            String targetFileType = name.substring(name.lastIndexOf('.') + 1).toUpperCase();
+            if (targetFileType.equals("JPG")) {
+                ft = FileType.JPG;
+            } else if (targetFileType.equals("MOV")) {
+                ft = FileType.MOV;
+            } else if (targetFileType.equals("DOC")) {
+                ft = FileType.DOC;
+            } else if (targetFileType.equals("TXT")) {
+                ft = FileType.TXT;
+            } else {
+                ft = FileType.XXX;
+            }
+            return ft;
+        } catch (Exception ex) {
+            return FileType.XXX;
+        }
+    }
+
+    public static String setNewNameForTargetFile(String folderName, String fileName, int fileNumber) {
+        /********************************************************************
+         * Set the new name for the file.
+         */
+        int commentStartPos = fileName.indexOf('[');
+        int commentEndPos = fileName.indexOf(']');
+        String commentField;
+
+        if ( commentStartPos >=0
+            & commentEndPos > 0
+            & commentStartPos < commentEndPos ) {
+            commentField=" " + fileName.substring(commentStartPos,commentEndPos+1);
+        } else {
+            commentField="";
+        }
+
+        return ( folderName.substring(0,17) +
+                String.format("#%03d ", fileNumber) +
+                folderName.substring(17) +
+                commentField +
                 fileName.substring(fileName.indexOf('.')) ) ;
     }
 }
