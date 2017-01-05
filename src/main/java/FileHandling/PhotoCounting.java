@@ -14,46 +14,6 @@ public class PhotoCounting {
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
 
-    // ENUM defines all the permanent instances of a Class upfront with all their
-    // instance variables.
-    // Getters, setters and constructors apply just the same as another class.
-    public enum FileType {
-         JPG ("Picture")
-        ,MOV ("Video")
-        ,TXT ("Document")
-        ,DOC ("Document")
-        ,MPG ("Video")
-        ,MOFF ("Video Analysis")
-        ,MODD ("Video Analysis")
-        ,DB ("Rubbish")
-        ,BMP ("Picture")
-        ,M4V ("Video")
-        ,THM ("Thumbnail")
-        ,PNG ("Picture")
-        ,MP4 ("Video")
-        ,INI ("Rubbish")
-        ,XXX ("Rubbish");
-
-        private final String category;
-        private int count;
-
-        FileType(String category) {
-            this.category = category;
-        }
-
-        public String getCategory() { return category; }
-        public int getCount() { return count; }
-        public void setCount(int count) { this.count = count; }
-
-        @Override
-        public String toString() {
-            return "FileType{" +
-                    "category='" + category + '\'' +
-                    ", count=" + count +
-                    '}';
-        }
-    }
-
     public static void doIt(String parentFolderName) {
 
         Map<FileType,Integer> fileTypeTotalsTable = new HashMap<FileType, Integer>();

@@ -12,7 +12,6 @@ public class PhotoRenaming {
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
-    public enum FileType {JPG,MOV,TXT,DOC,XXX}
 
     public static void doIt(String parentFolderName) {
 
