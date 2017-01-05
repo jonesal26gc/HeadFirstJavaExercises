@@ -9,7 +9,7 @@ public class PhotoCountApp {
         if ( args.length == 1) {
             parentFolderName = args[0];
         } else {
-            parentFolderName = "f:/Family Photo Library";
+            parentFolderName = "d:/Family Photo Library";
         }
 
         PhotoCounting.doIt(parentFolderName);

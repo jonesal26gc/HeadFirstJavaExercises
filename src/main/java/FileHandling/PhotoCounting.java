@@ -13,7 +13,46 @@ public class PhotoCounting {
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
-    public enum FileType {JPG,MOV,TXT,DOC,MPG,MOFF,MODD,DB,BMP,M4V,THM,PNG,MP4,INI,XXX}
+
+    // ENUM defines all the permanent instances of a Class upfront with all their
+    // instance variables.
+    // Getters, setters and constructors apply just the same as another class.
+    public enum FileType {
+         JPG ("Picture")
+        ,MOV ("Video")
+        ,TXT ("Document")
+        ,DOC ("Document")
+        ,MPG ("Video")
+        ,MOFF ("Video Analysis")
+        ,MODD ("Video Analysis")
+        ,DB ("Rubbish")
+        ,BMP ("Picture")
+        ,M4V ("Video")
+        ,THM ("Thumbnail")
+        ,PNG ("Picture")
+        ,MP4 ("Video")
+        ,INI ("Rubbish")
+        ,XXX ("Rubbish");
+
+        private final String category;
+        private int count;
+
+        FileType(String category) {
+            this.category = category;
+        }
+
+        public String getCategory() { return category; }
+        public int getCount() { return count; }
+        public void setCount(int count) { this.count = count; }
+
+        @Override
+        public String toString() {
+            return "FileType{" +
+                    "category='" + category + '\'' +
+                    ", count=" + count +
+                    '}';
+        }
+    }
 
     public static void doIt(String parentFolderName) {
 
@@ -48,11 +87,17 @@ public class PhotoCounting {
                     } else {
                         fileTypeTotalsTable.put(e.getKey(),e.getValue());
                     }
+                    FileType.BMP.setCount(e.getValue());
                 }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return;
+            }
+
+            System.out.println(NEW_LINE);
+            for (FileType f : FileType.values()) {
+                System.out.println(f.name() + " " + f.toString());
             }
 
         }
@@ -61,6 +106,9 @@ public class PhotoCounting {
         System.out.print(NEW_LINE + "Grand Totals:");
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
             System.out.print("  " + e.getKey() + ": " + e.getValue());
+            if ( e.getKey().getCategory().equals("Picture") ) {
+                System.out.print( String.format(" %s(s)",e.getKey().getCategory()));
+            }
         }
 
         /*
