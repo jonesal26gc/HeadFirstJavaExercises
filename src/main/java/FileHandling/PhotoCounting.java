@@ -41,6 +41,7 @@ public class PhotoCounting {
 
                 // Add the counts for the file types in the sub-folder to totals.
                 for (Map.Entry<FileType, Integer> e : fileTypeTable.entrySet()) {
+
                     if ( fileTypeTotalsTable.containsKey(e.getKey()) ) {
                         int value = fileTypeTotalsTable.get(e.getKey());
                         fileTypeTotalsTable.put(e.getKey(),value+e.getValue());
@@ -61,6 +62,16 @@ public class PhotoCounting {
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
             System.out.print("  " + e.getKey() + ": " + e.getValue());
         }
+
+        /*
+        switch (ft) {
+            case JPG: { System.out.println("It's a picture"); break; }
+            case MOV: { System.out.println("It's a movie"); break; }
+            case DOC: { System.out.println("It's a document"); break; }
+            case TXT: { System.out.println("It's a text document"); break; }
+            case XXX: { System.out.println("Don't know what it is !"); break; }
+        }
+        */
     }
 
     private static Map<FileType,Integer> processSubFolder(File subFolder) throws Exception {
@@ -123,15 +134,6 @@ public class PhotoCounting {
             System.out.println("> File " + String.format("%04d", fileNumber) + ": " + targetFile.getName());
         }
 
-        /*
-        switch (ft) {
-            case JPG: { System.out.println("It's a picture"); break; }
-            case MOV: { System.out.println("It's a movie"); break; }
-            case DOC: { System.out.println("It's a document"); break; }
-            case TXT: { System.out.println("It's a text document"); break; }
-            case XXX: { System.out.println("Don't know what it is !"); break; }
-        }
-        */
         return ft;
     }
 
