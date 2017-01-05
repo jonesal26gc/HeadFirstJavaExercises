@@ -12,6 +12,6 @@ public class PhotoCountApp {
             parentFolderName = "d:/Family Photo Library";
         }
 
-        PhotoCounting.doIt(parentFolderName);
+        PhotoCount.doIt(parentFolderName);
     }
 }

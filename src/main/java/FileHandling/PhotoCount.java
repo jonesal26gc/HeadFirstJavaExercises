@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhotoCounting {
+public class PhotoCount {
     /********************************************************************
      * This program loops through the photo album and renames the files
      * more appropriately.
@@ -55,15 +55,15 @@ public class PhotoCounting {
                 return;
             }
 
-            System.out.println(NEW_LINE);
-            for (FileType f : FileType.values()) {
-                System.out.println(f.name() + " " + f.toString());
-            }
+            //System.out.println(NEW_LINE);
+            //for (FileType f : FileType.values()) {
+            //    System.out.println(f.name() + " " + f.toString());
+            //}
 
         }
 
         // Show the total counts for the file types in the sub-folder.
-        System.out.print(NEW_LINE + "Grand Totals:");
+        System.out.print(NEW_LINE + NEW_LINE + "Grand Totals:");
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
             System.out.print("  " + e.getKey().name() + ": " + e.getValue());
             if ( e.getKey().getCategory().equals("Picture") ) {

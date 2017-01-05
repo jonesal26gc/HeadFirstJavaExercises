@@ -12,6 +12,7 @@ public class PhotoRenaming {
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
+    private static int fileNumber;
 
     public static void doIt(String parentFolderName) {
 
@@ -80,10 +81,9 @@ public class PhotoRenaming {
 
             // Iterate through the files in the sub-folder that will require renaming themselves.
             File[] listOfFiles = revisedSubFolder.listFiles();
-            int fileNumber = 0;
+            fileNumber=0;
             for (File targetFile : listOfFiles) {
-                fileNumber++;
-                processFile(revisedSubFolder, targetFile, fileNumber);
+                processFile(revisedSubFolder, targetFile);
             }
         }
     }
@@ -141,7 +141,7 @@ public class PhotoRenaming {
         return s.validate(subFolderName);
     }
 
-    private static void processFile(File subFolder, File targetFile, int fileNumber) throws Exception {
+    private static void processFile(File subFolder, File targetFile) throws Exception {
         /**************************************************************************
          * Process a file within the sub-folder.
          */
@@ -151,38 +151,35 @@ public class PhotoRenaming {
             throw new Exception("ERROR - expected file(s) but found sub-folder: " + targetFile.getName());
         }
 
-        // Inappropriate files are be deleted.
-        if ( targetFile.getName().startsWith("Thumb") ) {
-            System.out.println("Warning - inappropriate file found - will delete: " + targetFile.getName());
-            if (UPDATE_INDICATOR) {
-                targetFile.delete();
-            }
-        } else {
+        // display the original filename.
+        System.out.println("File: " + targetFile.getName());
 
-            // display the original filename.
-            System.out.println("File " + String.format("%04d",fileNumber) + ": " + targetFile.getName());
+        // Determine the type of the file.
+        FileType ft = determineFileType(targetFile.getName());
 
-            // Determine the type of the file.
-            FileType ft = determineFileType(targetFile.getName());
-            switch (ft) {
-                case JPG: { System.out.println("It's a picture"); break; }
-                case MOV: { System.out.println("It's a movie"); break; }
-                case DOC: { System.out.println("It's a document"); break; }
-                case TXT: { System.out.println("It's a text document"); break; }
-                case XXX: { System.out.println("Don't know what it is !"); break; }
-            }
+        // Process the file according to type.
+        if ( ft.getCategory().equals("Photo")) {
 
+            // Increment the file sequence number.
+            fileNumber++;
+
+            // Set the output file name.
             String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
             System.out.println("Revised file name is: " + revisedTargetFileName);
 
             // Rename the file.
-            File revisedTargetFile;
             if ( UPDATE_INDICATOR ) {
-                revisedTargetFile = new File(targetFile.getPath()
+                File revisedTargetFile = new File(targetFile.getPath()
                         .replace(targetFile.getName(),revisedTargetFileName));
                 targetFile.renameTo(revisedTargetFile);
-            } else {
-                revisedTargetFile = targetFile;
+            }
+
+        } else  if ( ft.getCategory().equals("Video")) {
+
+        } else  if ( ft.getCategory().equals("Rubbish")) {
+            System.out.println("Warning - inappropriate file found - will delete: " + targetFile.getName());
+            if (UPDATE_INDICATOR) {
+                targetFile.delete();
             }
         }
     }
