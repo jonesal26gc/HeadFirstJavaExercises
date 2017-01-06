@@ -4,37 +4,55 @@ package FileHandling;
 // instance variables.
 // Getters, setters and constructors apply just the same as another class.
 public enum FileType {
-     JPG ("Photo")
-    ,MOV ("Video")
-    ,TXT ("Document")
-    ,DOC ("Document")
-    ,MPG ("Video")
-    ,MOFF ("Video")
-    ,MODD ("Video")
-    ,DB ("Rubbish Database")
-    ,BMP ("Photo")
-    ,M4V ("Video")
-    ,THM ("Thumbnail")
-    ,PNG ("Photo")
-    ,MP4 ("Video")
-    ,INI ("Rubbish")
-    ,XXX ("Rubbish");
+     JPG (FileCategory.PHOTO)
+    ,MOV (FileCategory.VIDEO)
+    ,TXT (FileCategory.DOCUMENT)
+    ,DOC (FileCategory.DOCUMENT)
+    ,DOCX (FileCategory.DOCUMENT)
+    ,MPG (FileCategory.VIDEO)
+    ,MOFF (FileCategory.VIDEO)
+    ,MODD (FileCategory.VIDEO)
+    ,DB (FileCategory.RUBBISH)
+    ,BMP (FileCategory.PHOTO)
+    ,M4V (FileCategory.VIDEO)
+    ,THM (FileCategory.THUMBNAIL)
+    ,PNG (FileCategory.PHOTO)
+    ,MP4 (FileCategory.VIDEO)
+    ,INI (FileCategory.RUBBISH)
+    ,XXX (FileCategory.RUBBISH)
+    ,MP3 (FileCategory.MUSIC);
 
-    private final String category;
+    private final FileCategory fileCategory;
     private int count;
 
-    FileType(String category) {
-        this.category = category;
+    FileType(FileCategory fileCategory) {
+        this.fileCategory = fileCategory;
     }
 
-    public String getCategory() { return category; }
+    public FileCategory getFileCategory() {
+        return fileCategory;
+    }
+
     public int getCount() { return count; }
     public void setCount(int count) { this.count = count; }
+
+    public static FileType findFileTypeFromFilename(String filename){
+
+        if ( filename.lastIndexOf('.') >= 0 ) {
+            String fileExtension = filename.substring(filename.lastIndexOf('.')+1).toUpperCase();
+            for ( FileType i : FileType.values()) {
+                if ( i.name().equals(fileExtension) ) {
+                    return i;
+                }
+            }
+        }
+        return FileType.XXX;
+    }
 
     @Override
     public String toString() {
         return "FileType{" +
-                "category='" + category + '\'' +
+                "fileCategory=" + fileCategory +
                 ", count=" + count +
                 '}';
     }

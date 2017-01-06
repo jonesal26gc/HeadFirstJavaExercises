@@ -66,20 +66,15 @@ public class PhotoCount {
         System.out.print(NEW_LINE + NEW_LINE + "Grand Totals:");
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
             System.out.print("  " + e.getKey().name() + ": " + e.getValue());
-            if ( e.getKey().getCategory().equals("Picture") ) {
-                System.out.print( String.format(" %s(s)",e.getKey().getCategory()));
+            if ( e.getKey().getFileCategory().equals(FileCategory.PHOTO) ) {
+                System.out.print( String.format(" %s(s)",e.getKey().getFileCategory()));
             }
         }
 
-        /*
-        switch (ft) {
-            case JPG: { System.out.println("It's a picture"); break; }
-            case MOV: { System.out.println("It's a movie"); break; }
-            case DOC: { System.out.println("It's a document"); break; }
-            case TXT: { System.out.println("It's a text document"); break; }
-            case XXX: { System.out.println("Don't know what it is !"); break; }
-        }
-        */
+        //for (FileType filetype : FileType.values() ) {
+        //    System.out.println(filetype.name());
+        //}
+
     }
 
     private static Map<FileType,Integer> processSubFolder(File subFolder) throws Exception {
@@ -103,7 +98,7 @@ public class PhotoCount {
         int fileNumber = 0;
         for (File targetFile : listOfFiles) {
             fileNumber++;
-            FileType ft = processFile(subFolder, targetFile, fileNumber);
+            FileType ft = processFile(targetFile, fileNumber);
 
             // Add or increment the file type counter in the table.
             if ( fileTypeTable.containsKey(ft) ) {
@@ -124,7 +119,7 @@ public class PhotoCount {
         return fileTypeTable;
     }
 
-    private static FileType processFile(File subFolder, File targetFile, int fileNumber) throws Exception {
+    private static FileType processFile(File targetFile, int fileNumber) throws Exception {
         /**************************************************************************
          * Process a file within the sub-folder.
          */
@@ -135,7 +130,7 @@ public class PhotoCount {
         }
 
         // Determine the type of the file.
-        FileType ft = determineFileType(targetFile.getName());
+        FileType ft = FileType.findFileTypeFromFilename(targetFile.getName());
 
         // display the original filename.
         if (ft.equals(FileType.XXX)) {
@@ -144,46 +139,4 @@ public class PhotoCount {
 
         return ft;
     }
-
-    public static FileType determineFileType(String name) {
-        FileType ft;
-        try {
-            String targetFileType = name.substring(name.lastIndexOf('.') + 1).toUpperCase();
-            if (targetFileType.equals("JPG")) {
-                ft = FileType.JPG;
-            } else if (targetFileType.equals("MOV")) {
-                ft = FileType.MOV;
-            } else if (targetFileType.equals("DOC")) {
-                ft = FileType.DOC;
-            } else if (targetFileType.equals("TXT")) {
-                ft = FileType.TXT;
-            } else if (targetFileType.equals("MPG")) {
-                ft = FileType.MPG;
-            } else if (targetFileType.equals("MOFF")) {
-                ft = FileType.MOFF;
-            } else if (targetFileType.equals("MODD")) {
-                ft = FileType.MODD;
-            } else if (targetFileType.equals("DB")) {
-                ft = FileType.DB;
-            } else if (targetFileType.equals("BMP")) {
-                ft = FileType.BMP;
-            } else if (targetFileType.equals("M4V")) {
-                ft = FileType.M4V;
-            } else if (targetFileType.equals("THM")) {
-                ft = FileType.THM;
-            } else if (targetFileType.equals("PNG")) {
-                ft = FileType.PNG;
-            } else if (targetFileType.equals("MP4")) {
-                ft = FileType.MP4;
-            } else if (targetFileType.equals("INI")) {
-                ft = FileType.INI;
-            } else {
-                ft = FileType.XXX;
-            }
-            return ft;
-        } catch (Exception ex) {
-            return FileType.XXX;
-        }
-    }
-
 }

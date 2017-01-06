@@ -8,7 +8,7 @@ public class PhotoRenaming {
  * more appropriately.
  */
 
-    private static final boolean UPDATE_INDICATOR = true;
+    private static final boolean UPDATE_INDICATOR = false;
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
@@ -158,26 +158,28 @@ public class PhotoRenaming {
         FileType ft = determineFileType(targetFile.getName());
 
         // Process the file according to type.
-        if ( ft.getCategory().equals("Photo")) {
-
-            // Increment the file sequence number.
-            fileNumber++;
-
-            // Set the output file name.
-            String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
-            System.out.println("Revised file name is: " + revisedTargetFileName);
+        if ( ft.getFileCategory().equals(FileCategory.PHOTO)) {
 
             // Rename the file.
             if ( UPDATE_INDICATOR ) {
+                // Increment the file sequence number.
+                fileNumber++;
+
+                // Set the output file name.
+                String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
+                System.out.println("Revised file name is: " + revisedTargetFileName);
+
                 File revisedTargetFile = new File(targetFile.getPath()
                         .replace(targetFile.getName(),revisedTargetFileName));
                 targetFile.renameTo(revisedTargetFile);
             }
 
-        } else  if ( ft.getCategory().equals("Video")) {
-
-        } else  if ( ft.getCategory().equals("Rubbish")) {
-            System.out.println("Warning - inappropriate file found - will delete: " + targetFile.getName());
+        } else  if ( ft.getFileCategory().equals(FileCategory.DOCUMENT) ) {
+            System.out.println("Warning - Document/Text file found - will RETAIN: " + targetFile.getName());
+        } else  if ( ft.getFileCategory().equals(FileCategory.VIDEO) ) {
+            System.out.println("Warning - Video file found - will MOVE: " + targetFile.getName());
+        } else  if ( ft.getFileCategory().equals(FileCategory.RUBBISH) ) {
+            System.out.println("Warning - inappropriate file found - will DELETE: " + targetFile.getName());
             if (UPDATE_INDICATOR) {
                 targetFile.delete();
             }
@@ -185,6 +187,9 @@ public class PhotoRenaming {
     }
 
     public static FileType determineFileType(String name) {
+        /*******************************************************************
+         * Determine the file type from the file name suffix.
+         */
         FileType ft;
         try {
             String targetFileType = name.substring(name.lastIndexOf('.') + 1).toUpperCase();
@@ -196,6 +201,28 @@ public class PhotoRenaming {
                 ft = FileType.DOC;
             } else if (targetFileType.equals("TXT")) {
                 ft = FileType.TXT;
+            } else if (targetFileType.equals("MPG")) {
+                ft = FileType.MPG;
+            } else if (targetFileType.equals("MOFF")) {
+                ft = FileType.MOFF;
+            } else if (targetFileType.equals("MODD")) {
+                ft = FileType.MODD;
+            } else if (targetFileType.equals("DB")) {
+                ft = FileType.DB;
+            } else if (targetFileType.equals("BMP")) {
+                ft = FileType.BMP;
+            } else if (targetFileType.equals("M4V")) {
+                ft = FileType.M4V;
+            } else if (targetFileType.equals("THM")) {
+                ft = FileType.THM;
+            } else if (targetFileType.equals("PNG")) {
+                ft = FileType.PNG;
+            } else if (targetFileType.equals("MP4")) {
+                ft = FileType.MP4;
+            } else if (targetFileType.equals("MP3")) {
+                ft = FileType.MP3;
+            } else if (targetFileType.equals("INI")) {
+                ft = FileType.INI;
             } else {
                 ft = FileType.XXX;
             }
