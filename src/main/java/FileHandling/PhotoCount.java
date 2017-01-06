@@ -47,34 +47,23 @@ public class PhotoCount {
                     } else {
                         fileTypeTotalsTable.put(e.getKey(),e.getValue());
                     }
-                    FileType.BMP.setCount(e.getValue());
                 }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return;
             }
-
-            //System.out.println(NEW_LINE);
-            //for (FileType f : FileType.values()) {
-            //    System.out.println(f.name() + " " + f.toString());
-            //}
-
         }
 
         // Show the total counts for the file types in the sub-folder.
-        System.out.print(NEW_LINE + NEW_LINE + "Grand Totals:");
+        System.out.print(NEW_LINE + "Grand Totals:");
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
             System.out.print("  " + e.getKey().name() + ": " + e.getValue());
-            if ( e.getKey().getFileCategory().equals(FileCategory.PHOTO) ) {
+            if ( e.getKey().getFileCategory().equals(FileCategory.PICTURE) ) {
                 System.out.print( String.format(" %s(s)",e.getKey().getFileCategory()));
             }
         }
-
-        //for (FileType filetype : FileType.values() ) {
-        //    System.out.println(filetype.name());
-        //}
-
+        System.out.print(NEW_LINE);
     }
 
     private static Map<FileType,Integer> processSubFolder(File subFolder) throws Exception {
@@ -115,6 +104,7 @@ public class PhotoCount {
         for (Map.Entry<FileType, Integer> e : fileTypeTable.entrySet()) {
             System.out.print("  " + e.getKey().name() + ": " + e.getValue());
         }
+        System.out.print(NEW_LINE);
 
         return fileTypeTable;
     }

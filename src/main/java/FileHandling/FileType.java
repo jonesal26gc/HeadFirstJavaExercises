@@ -4,7 +4,7 @@ package FileHandling;
 // instance variables.
 // Getters, setters and constructors apply just the same as another class.
 public enum FileType {
-     JPG (FileCategory.PHOTO)
+     JPG (FileCategory.PICTURE)
     ,MOV (FileCategory.VIDEO)
     ,TXT (FileCategory.DOCUMENT)
     ,DOC (FileCategory.DOCUMENT)
@@ -13,17 +13,16 @@ public enum FileType {
     ,MOFF (FileCategory.VIDEO)
     ,MODD (FileCategory.VIDEO)
     ,DB (FileCategory.RUBBISH)
-    ,BMP (FileCategory.PHOTO)
+    ,BMP (FileCategory.PICTURE)
     ,M4V (FileCategory.VIDEO)
     ,THM (FileCategory.THUMBNAIL)
-    ,PNG (FileCategory.PHOTO)
+    ,PNG (FileCategory.PICTURE)
     ,MP4 (FileCategory.VIDEO)
     ,INI (FileCategory.RUBBISH)
     ,XXX (FileCategory.RUBBISH)
     ,MP3 (FileCategory.MUSIC);
 
     private final FileCategory fileCategory;
-    private int count;
 
     FileType(FileCategory fileCategory) {
         this.fileCategory = fileCategory;
@@ -32,9 +31,6 @@ public enum FileType {
     public FileCategory getFileCategory() {
         return fileCategory;
     }
-
-    public int getCount() { return count; }
-    public void setCount(int count) { this.count = count; }
 
     public static FileType findFileTypeFromFilename(String filename){
 
@@ -53,7 +49,6 @@ public enum FileType {
     public String toString() {
         return "FileType{" +
                 "fileCategory=" + fileCategory +
-                ", count=" + count +
                 '}';
     }
 }
