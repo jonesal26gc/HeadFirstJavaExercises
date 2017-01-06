@@ -17,15 +17,15 @@ public class TESTsetNewNameForTargetFile {
     public void shouldGiveInvalidFileType() {
 
         FileType ft;
-        ft = PhotoRenaming.determineFileType("xxxx.jpg");
+        ft = FileType.findFileTypeFromFilename("xxxx.jpg");
         System.out.println(ft.toString());
-        ft = PhotoRenaming.determineFileType("xxxx.mov");
+        ft = FileType.findFileTypeFromFilename("xxxx.mov");
         System.out.println(ft.toString());
-        ft = PhotoRenaming.determineFileType("xxxx.doc");
+        ft = FileType.findFileTypeFromFilename("xxxx.doc");
         System.out.println(ft.toString());
-        ft = PhotoRenaming.determineFileType("xxxx.txt");
+        ft = FileType.findFileTypeFromFilename("xxxx.txt");
         System.out.println(ft.toString());
-        ft = PhotoRenaming.determineFileType("xxxx.cbl");
+        ft = FileType.findFileTypeFromFilename("xxxx.cbl");
         System.out.println(ft.toString());
     }
 }

@@ -155,7 +155,7 @@ public class PhotoRenaming {
         System.out.println("File: " + targetFile.getName());
 
         // Determine the type of the file.
-        FileType ft = determineFileType(targetFile.getName());
+        FileType ft = FileType.findFileTypeFromFilename(targetFile.getName());
 
         // Process the file according to type.
         if ( ft.getFileCategory().equals(FileCategory.PHOTO)) {
@@ -183,52 +183,6 @@ public class PhotoRenaming {
             if (UPDATE_INDICATOR) {
                 targetFile.delete();
             }
-        }
-    }
-
-    public static FileType determineFileType(String name) {
-        /*******************************************************************
-         * Determine the file type from the file name suffix.
-         */
-        FileType ft;
-        try {
-            String targetFileType = name.substring(name.lastIndexOf('.') + 1).toUpperCase();
-            if (targetFileType.equals("JPG")) {
-                ft = FileType.JPG;
-            } else if (targetFileType.equals("MOV")) {
-                ft = FileType.MOV;
-            } else if (targetFileType.equals("DOC")) {
-                ft = FileType.DOC;
-            } else if (targetFileType.equals("TXT")) {
-                ft = FileType.TXT;
-            } else if (targetFileType.equals("MPG")) {
-                ft = FileType.MPG;
-            } else if (targetFileType.equals("MOFF")) {
-                ft = FileType.MOFF;
-            } else if (targetFileType.equals("MODD")) {
-                ft = FileType.MODD;
-            } else if (targetFileType.equals("DB")) {
-                ft = FileType.DB;
-            } else if (targetFileType.equals("BMP")) {
-                ft = FileType.BMP;
-            } else if (targetFileType.equals("M4V")) {
-                ft = FileType.M4V;
-            } else if (targetFileType.equals("THM")) {
-                ft = FileType.THM;
-            } else if (targetFileType.equals("PNG")) {
-                ft = FileType.PNG;
-            } else if (targetFileType.equals("MP4")) {
-                ft = FileType.MP4;
-            } else if (targetFileType.equals("MP3")) {
-                ft = FileType.MP3;
-            } else if (targetFileType.equals("INI")) {
-                ft = FileType.INI;
-            } else {
-                ft = FileType.XXX;
-            }
-            return ft;
-        } catch (Exception ex) {
-            return FileType.XXX;
         }
     }
 
