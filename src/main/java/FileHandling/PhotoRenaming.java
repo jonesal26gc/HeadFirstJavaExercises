@@ -8,7 +8,7 @@ public class PhotoRenaming {
  * more appropriately.
  */
 
-    private static final boolean UPDATE_INDICATOR = false;
+    private static final boolean UPDATE_INDICATOR = true;
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
@@ -45,7 +45,7 @@ public class PhotoRenaming {
      * process a sub-folder and the files found within it.
      */
         // Display sub-folder name.
-        System.out.println(NEW_LINE + "Sub-folder: " + subFolder.getName());
+        System.out.print( NEW_LINE +NEW_LINE + "Sub-folder: " + subFolder.getName());
 
         // Check that this is actually a sub-folder.
         if ( ! (subFolder.isDirectory()) ) {
@@ -66,9 +66,11 @@ public class PhotoRenaming {
             }
         } else {
 
+            //Long bytes = Files.copy(subFolder.getPath(),subFolder.getPath(), StandardCopyOption.REPLACE_EXISTING);
+
             // Derive the reformatted sub-folder name.
             String revisedSubFolderName = renameSubFolder(subFolder.getName());
-            System.out.println("Revised sub-folder name is: " + revisedSubFolderName);
+            System.out.print(" ==> " + revisedSubFolderName);
 
             // Rename this sub-folder.
             File revisedSubFolder;
@@ -141,13 +143,14 @@ public class PhotoRenaming {
         }
 
         // display the original filename.
-        System.out.println("File: " + targetFile.getName());
+        //System.out.println("File: " + targetFile.getName());
 
         // Determine the type of the file.
         FileType ft = FileType.findFileTypeFromFilename(targetFile.getName());
 
         // Process the file according to type.
         if ( ft.getFileCategory().equals(FileCategory.PICTURE)) {
+            System.out.print(NEW_LINE + "Information - Picture file found - renaming: " + targetFile.getName());
 
             // Rename the file.
             if ( UPDATE_INDICATOR ) {
@@ -156,7 +159,7 @@ public class PhotoRenaming {
 
                 // Set the output file name.
                 String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(), pictureNumber);
-                System.out.println("Revised file name is: " + revisedTargetFileName);
+                System.out.print(" ==> " + revisedTargetFileName);
 
                 File revisedTargetFile = new File(targetFile.getPath()
                         .replace(targetFile.getName(),revisedTargetFileName));
@@ -164,10 +167,10 @@ public class PhotoRenaming {
             }
 
         } else  if ( ft.getFileCategory().equals(FileCategory.DOCUMENT) ) {
-            System.out.println("Warning - Document/Text file found - will RETAIN: " + targetFile.getName());
+            System.out.print(NEW_LINE + "Information - Document/Text file found - retaining: " + targetFile.getName());
 
         } else  if ( ft.getFileCategory().equals(FileCategory.VIDEO) ) {
-            System.out.println("Warning - Video file found - will MOVE: " + targetFile.getName());
+            System.out.print(NEW_LINE + "Information - Video file found - renaming and moving: " + targetFile.getName());
 
             if ( UPDATE_INDICATOR ) {
 
@@ -181,12 +184,21 @@ public class PhotoRenaming {
                         throw new Exception("Error - failed to create video sub-folder: " + videoSubFolder.getName());
                     }
                 }
-                File revisedTargetFile = new File(targetFile.getPath().replaceFirst("Photo", "Video"));
+
+                // Set the output file name.
+                String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(), videoNumber);
+                System.out.print(" ==> " + revisedTargetFileName);
+
+                File revisedTargetFile = new File(targetFile.getPath().replaceFirst("Photo", "Video")
+                                                    .replace(targetFile.getName(),revisedTargetFileName));
                 targetFile.renameTo(revisedTargetFile);
             }
 
+        } else  if ( ft.getFileCategory().equals(FileCategory.VIDEO_ANALYSIS) ) {
+            System.out.print(NEW_LINE + "Information - Video analysis file found - retaining: " + targetFile.getName());
+
         } else  if ( ft.getFileCategory().equals(FileCategory.RUBBISH) ) {
-            System.out.println("Warning - inappropriate file found - will DELETE: " + targetFile.getName());
+            System.out.print(NEW_LINE + "Warning - redundant file found - deleting: " + targetFile.getName());
             if (UPDATE_INDICATOR) {
                 targetFile.delete();
             }
