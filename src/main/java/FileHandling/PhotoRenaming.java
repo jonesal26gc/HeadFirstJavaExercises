@@ -176,8 +176,21 @@ public class PhotoRenaming {
 
         } else  if ( ft.getFileCategory().equals(FileCategory.DOCUMENT) ) {
             System.out.println("Warning - Document/Text file found - will RETAIN: " + targetFile.getName());
+
         } else  if ( ft.getFileCategory().equals(FileCategory.VIDEO) ) {
             System.out.println("Warning - Video file found - will MOVE: " + targetFile.getName());
+
+            if ( UPDATE_INDICATOR ) {
+                File videoSubFolder = new File(subFolder.getPath().replaceFirst("Photo", "Video"));
+                if ( ! videoSubFolder.exists() ) {
+                    if ( ! videoSubFolder.mkdir() ) {
+                        throw new Exception("Error - failed to create video sub-folder: " + videoSubFolder.getName());
+                    }
+                }
+                File revisedTargetFile = new File(targetFile.getPath().replaceFirst("Photo", "Video"));
+                targetFile.renameTo(revisedTargetFile);
+            }
+
         } else  if ( ft.getFileCategory().equals(FileCategory.RUBBISH) ) {
             System.out.println("Warning - inappropriate file found - will DELETE: " + targetFile.getName());
             if (UPDATE_INDICATOR) {
