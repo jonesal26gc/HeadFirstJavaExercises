@@ -58,10 +58,10 @@ public class PhotoCount {
         // Show the total counts for the file types in the sub-folder.
         System.out.print(NEW_LINE + "Grand Totals:");
         for (Map.Entry<FileType, Integer> e : fileTypeTotalsTable.entrySet()) {
-            System.out.print("  " + e.getKey().name() + ": " + e.getValue());
-            if ( e.getKey().getFileCategory().equals(FileCategory.PICTURE) ) {
+            System.out.print(NEW_LINE + "  " + e.getKey().name() + ": " + e.getValue());
+            //if ( e.getKey().getFileCategory().equals(FileCategory.PICTURE) ) {
                 System.out.print( String.format(" %s(s)",e.getKey().getFileCategory()));
-            }
+            //}
         }
         System.out.print(NEW_LINE);
     }
