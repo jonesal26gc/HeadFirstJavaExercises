@@ -17,26 +17,26 @@ public enum MonthName {
     ,NOV ("Nov", "November", 11)
     ,DEC ("Dec", "December", 12);
 
-    private String abbrev;
+    private String abbreviatedName;
     private String fullName;
-    private int seq;
+    private int number;
 
-    MonthName(String abbrev, String fullName, int seq) {
-        this.abbrev = abbrev;
+    MonthName(String abbrev, String fullName, int number) {
+        this.abbreviatedName = abbrev;
         this.fullName = fullName;
-        this.seq = seq;
+        this.number = number;
     }
 
-    public String getAbbrev() {
-        return abbrev;
+    public String getAbbreviatedName() {
+        return abbreviatedName;
     }
 
     public String getFullName() {
         return fullName;
     }
 
-    public int getSeq() {
-        return seq;
+    public int getNumber() {
+        return number;
     }
 
     public static StringBuffer listMonths() {
@@ -47,4 +47,23 @@ public enum MonthName {
         }
         return sb;
     }
+
+    public static String findAbbreviatedName(int number){
+
+        for ( MonthName m : MonthName.values()){
+            if ( m.getNumber() == number ) {
+                return m.getAbbreviatedName();
+            }
+        }
+        return "xxx";
+    }
+
+    public static String findAbbreviatedName(String nonNumber) {
+        try {
+            return findAbbreviatedName(Integer.parseInt(nonNumber));
+        } catch ( NumberFormatException ex ) {
+            return findAbbreviatedName(0);
+        }
+    }
+
 }

@@ -12,7 +12,8 @@ public class PhotoRenaming {
     private static final String NEW_LINE = "\n";
     private static final String [] MONTH_LABELS = {"Jan","Feb","Mar","Apr","May","Jun"
             ,"Jul","Aug","Sep","Oct","Nov","Dec","xxx"};
-    private static int fileNumber;
+    private static int pictureNumber;
+    private static int videoNumber;
 
     public static void doIt(String parentFolderName) {
 
@@ -81,7 +82,7 @@ public class PhotoRenaming {
 
             // Iterate through the files in the sub-folder that will require renaming themselves.
             File[] listOfFiles = revisedSubFolder.listFiles();
-            fileNumber=0;
+            pictureNumber = videoNumber = 0;
             for (File targetFile : listOfFiles) {
                 processFile(revisedSubFolder, targetFile);
             }
@@ -112,24 +113,12 @@ public class PhotoRenaming {
                 + "-"
                 + part1.substring(8, 10)
                 + " "
-                + getMonthLabel(part1.substring(5, 7))
+                + MonthName.findAbbreviatedName(part1.substring(5, 7))
                 + part1.substring(2, 4)
                 + " ";
 
         // Return the revised name.
         return (revisedPart1 + part2);
-    }
-
-    private static String getMonthLabel(String month) {
-        /*******************************************************
-         * Look-up the Month's acronym using the original month number.
-         */
-        try {
-            int i = Integer.parseInt(month);
-            return MONTH_LABELS[i - 1];
-        } catch (NumberFormatException ex) {
-            return MONTH_LABELS[12];
-        }
     }
 
     private static boolean checkSubFolderNameFormat(String subFolderName) {
@@ -163,10 +152,10 @@ public class PhotoRenaming {
             // Rename the file.
             if ( UPDATE_INDICATOR ) {
                 // Increment the file sequence number.
-                fileNumber++;
+                pictureNumber++;
 
                 // Set the output file name.
-                String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(),fileNumber);
+                String revisedTargetFileName = setNewNameForTargetFile(subFolder.getName(),targetFile.getName(), pictureNumber);
                 System.out.println("Revised file name is: " + revisedTargetFileName);
 
                 File revisedTargetFile = new File(targetFile.getPath()
@@ -181,6 +170,11 @@ public class PhotoRenaming {
             System.out.println("Warning - Video file found - will MOVE: " + targetFile.getName());
 
             if ( UPDATE_INDICATOR ) {
+
+                // Increment the video number.
+                videoNumber++;
+
+                // Move the file to the video library.
                 File videoSubFolder = new File(subFolder.getPath().replaceFirst("Photo", "Video"));
                 if ( ! videoSubFolder.exists() ) {
                     if ( ! videoSubFolder.mkdir() ) {
